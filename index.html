@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notes App</title>
+  <link rel="manifest" href="manifest.json">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #E1CFF7;
+      padding: 20px;
+      font-family: sans-serif;
+    }
+
+    .app-container {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    .app-header {
+      margin-bottom: 25px;
+    }
+
+    .app-title {
+      color: #4B0082;
+      font-size: 2.5rem;
+      font-weight: bold;
+      font-style: italic;
+    }
+
+    .input-section {
+      position: relative;
+      margin-bottom: 30px;
+    }
+
+    textarea {
+      width: 100%;
+      height: 180px;
+      background: #E1CFF7;
+      border: 3px solid #4B0082;
+      border-radius: 8px;
+      padding: 15px;
+      font-size: 1.1rem;
+      color: #4B0082;
+    }
+
+    textarea::placeholder {
+      color: #6A0DAD;
+      font-style: italic;
+    }
+
+    .save-btn {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      background: #4B0082;
+      color: white;
+      border: none;
+      padding: 6px 18px;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+
+    .saved-title {
+      color: #4B0082;
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+    }
+
+    .saved-note-card {
+      width: 100%;
+      min-height: 60px;
+      background: #9370DB;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      padding: 12px 15px;
+      color: white;
+      font-size: 1rem;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .note-text {
+      width: 90%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .delete-btn {
+      background: #4B0082;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app-container">
+    <header class="app-header">
+      <h1 class="app-title">Notes</h1>
+    </header>
+
+    <div class="input-section">
+      <textarea id="noteInput" placeholder="Write your note here..."></textarea>
+      <button class="save-btn" id="saveBtn">SAVE</button>
+    </div>
+
+    <h2 class="saved-title">Saved</h2>
+    <div id="notesList"></div>
+  </div>
+
+  <script>
+    let input = document.getElementById('noteInput');
+    let saveBtn = document.getElementById('saveBtn');
+    let notesList = document.getElementById('notesList');
+
+    saveBtn.onclick = function () {
+      let noteContent = input.value.trim();
+
+      if (noteContent != '') {
+        let noteBox = document.createElement('div');
+        noteBox.className = 'saved-note-card';
+
+        let noteText = document.createElement('div');
+        noteText.className = 'note-text';
+        noteText.textContent = noteContent;
+
+        let deleteBtn = document.createElement('button');
+        deleteBtn.className = 'delete-btn';
+        deleteBtn.textContent = 'X';
+
+        noteBox.appendChild(noteText);
+        noteBox.appendChild(deleteBtn);
+        notesList.appendChild(noteBox);
+
+        deleteBtn.onclick = function () {
+          notesList.removeChild(noteBox);
+        }
+
+        input.value = '';
+      }
+    }
+  </script>
+
+  <script>
+    if (serviceWorker in navigator) {
+      navigator.serviceWorker.register('/service-worker.js');
+    }
+  </script>
+</body>
+</html>
